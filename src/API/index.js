@@ -1,7 +1,7 @@
-const url = "http://localhost:3001/";
+const url = "http://localhost:3001/storageLinks";
 
-export async function getStorage(categorie, urlToStore) {
-  const urlPath = url + "storageLinks";
+export async function storeLink(category, urlToStore) {
+  const urlPath = url;
 
   try {
     let response = await fetch(urlPath, {
@@ -11,13 +11,27 @@ export async function getStorage(categorie, urlToStore) {
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-        categorie,
+        categorie: category,
         urlToStore
       })
     });
 
     let responseJson = await response.json();
 
+    return responseJson;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getLinkByCategory(category) {
+  const urlPath = url + "/category/" + category;
+
+  try {
+    let response = await fetch(urlPath, {
+      method: "GET"
+    });
+    let responseJson = await response.json();
     return responseJson;
   } catch (error) {
     console.error(error);
