@@ -6,15 +6,15 @@ import Logo_twitch from "../../img/twitch.png";
 import Logo_youtube from "../../img/youtube.png";
 import SaveIcon from "../../assets/save.svg";
 import Video from "../../components/Video";
-import { storeLink, getLinkByCategory } from "../../API";
+import { storeLink, getLinkByCategory, deleteLink } from "../../API";
 
 const ContainerMain = styled.div`
   display: flex;
   flex: 1;
   background: ${props =>
     props.theme === "twitch"
-      ? "linear-gradient(130deg, #f0f0ff 95%, #282828 5%)"
-      : "linear-gradient(130deg, #282828 95%, #f0f0ff 5%)"};
+      ? "linear-gradient(135deg, #f0f0ff 95%, #282828 5%)"
+      : "linear-gradient(-45deg, #282828 95%, #f0f0ff 5%)"};
   background-attachment: fixed;
   flex-direction: column;
   padding: 20px;
@@ -108,6 +108,15 @@ class Storage extends Component {
     });
   };
 
+  handleDelete = id => {
+    const { storage } = this.state;
+    deleteLink(id).then(data => {
+      console.log(data);
+      const newStorage = storage.filter(video => video._id !== id);
+      this.setState({ storage: newStorage });
+    });
+  };
+
   _displayStorage() {
     const storage = this.state.storage;
     //Lorsque aucun résultat n'a été trouvé
@@ -126,6 +135,7 @@ class Storage extends Component {
             <Video
               key={item._id}
               category={this.state.category}
+              handleDelete={this.handleDelete}
               id={item._id}
               title="none"
               urlID={item.urlToStore}
